@@ -138,9 +138,6 @@ Parsing Customers' metadata in progress... ━━━━━━━━━━━━�
 │ EGIREQ-133 │ https://jira.egi.eu/browse/EGIREQ-133    │ DONE        │ 2023-01-31 │ LOW      │ Giuseppe La Rocca              │
 └────────────┴──────────────────────────────────────────┴─────────────┴────────────┴──────────┴────────────────────────────────┘
 
-[WARNING] VO *SLA VIOLATIONS* in the reporting period 
-[INFO] Reporting Period = 2023.07-12 
-Full list of VO SLA violations is here: https://confluence.egi.eu/display/IMS/SLA+Violations
 ┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
 ┃ Issue      ┃ URL                                      ┃ Status ┃ Created    ┃ Priority ┃
 ┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
@@ -159,6 +156,8 @@ Full list of VO SLA violations is here: https://confluence.egi.eu/display/IMS/SL
 │ IMSSLA-302 │ https://jira.egi.eu/browse/IMSSLA-302    │ DONE   │ 2023-07-11 │ LOW      │
 │ IMSSLA-301 │ https://jira.egi.eu/browse/IMSSLA-301    │ DONE   │ 2023-07-11 │ LOW      │
 │ IMSSLA-300 │ https://jira.egi.eu/browse/IMSSLA-300    │ DONE   │ 2023-07-07 │ LOW      │
+│ IMSSLA-299 │ https://jira.egi.eu/browse/IMSSLA-299    │ DONE   │ 2023-07-07 │ LOW      │
+│ IMSSLA-298 │ https://jira.egi.eu/browse/IMSSLA-298    │ DONE   │ 2023-07-07 │ LOW      │
 └────────────┴──────────────────────────────────────────┴────────┴────────────┴──────────┘
 
 						*** [ SUMMARY REPORT ] ***
@@ -188,7 +187,7 @@ Full list of VO SLA violations is here: https://confluence.egi.eu/display/IMS/SL
 │ KPI:CRM.Supported.1     │ Number of Customers in 'DESIGN', 'PILOT', 'PILOT EVALUATION', 'READY FOR PRODUCTION' state │     7 │
 │                         │ (total, cumulative)                                                                        │       │
 │ KPI:SLM.SLA.1a          │ Number of active VO SLAs (total, cumulative)                                               │     0 │
-│ KPI:SLM.SLA.2           │ Number of SLA violations (relative)                                                        │    15 │
+│ KPI:SLM.SLA.2           │ Number of SLA violations (relative)                                                        │    17 │
 │ KPI:CRM.Complains.1     │ Number of NEW Customer Complains (e.g.: status = TODO, NEW) (relative)                     │     0 │
 │ KPI:CRM.Complains.2     │ Number of OPEN Complains (e.g. status = IN PROGRESS, ON HOLD) (relative)                   │     1 │
 └─────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┴───────┘
