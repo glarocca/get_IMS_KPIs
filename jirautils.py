@@ -146,6 +146,7 @@ def getSLAViolations(env, violations):
     _url = env['JIRA_SERVER_URL'] \
             + "rest/api/latest/search?jql=project=" \
             + env['SLA_VIOLATIONS_PROJECTKEY'] \
+            + "&maxResults=500" \
             + "&issueType=" + env['SLA_VIOLATIONS_ISSUETYPE'] \
             + "&resolution=Unresolved" \
             + "&created>=" + start \
@@ -162,7 +163,10 @@ def getSLAViolations(env, violations):
 
     for issue in issues['issues']:
         if env['SLA_VIOLATIONS_ISSUETYPE'] in (issue['fields']['issuetype']['name']):
-           _issues.append(issue['key'])
+            if ((issue['fields']['created'] >= start) and
+                (issue['fields']['created'] < end)):
+               _issues.append(issue['key'])
+               #print(issue['key'], issue['fields']['created'])
 
     if len(_issues):
        for issue in _issues:
@@ -172,7 +176,7 @@ def getSLAViolations(env, violations):
 
 
 def getSLAViolationsDetails(env, issue, violations):
-    ''' Retrieve the details for a given violation (issue) '''
+    ''' Retrieve details for a given SLA violation (issue) '''
 
     _url = env['JIRA_SERVER_URL'] + "rest/api/latest/issue/" + issue
 
