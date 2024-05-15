@@ -141,7 +141,7 @@ def getSLAViolations(env, violations):
     _issues = []
     
     start = (env['DATE_FROM'].replace("/", "-")) + "-01"
-    end = (env['DATE_TO'].replace("/", "-")) + "-01"
+    end = (env['DATE_TO'].replace("/", "-")) + "-31"
 
     _url = env['JIRA_SERVER_URL'] \
             + "rest/api/latest/search?jql=project=" \
