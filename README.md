@@ -76,12 +76,15 @@ This operation may take some time to complete. Please wait!
     "DATE_TO": "2023/12",
     "LOG": "DEBUG"
 }
+
 [INFO] Check the status of the servers and tokens 
+
 [INFO] CONFLUENCE_SERVER_URL is *UP* 
 [INFO] The Personal Access Token (PAT) is valid!
 - Username    = glarocca_token 
 - Created at  = 2023-10-26, 08:20:27
 - Expiring at = 2024-10-25, 08:20:27
+
 [INFO] JIRA_SERVER_URL is *UP* 
 [INFO] The Personal Access Token (PAT) is valid!
 - Username    = glarocca_JIRA 
@@ -94,6 +97,7 @@ Generating reporting for the EGI IMS space is in progress...
 This operation may take a few minutes to complete. Please wait!
 Parsing the CustomersDB in progress... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 Parsing Customers' metadata in progress... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
+
 [INFO] Resources: 354, 708, 443, 10, 
 {
     "Customer Name": "BioMed (LSGC)",
@@ -204,5 +208,4 @@ Parsing Customers' metadata in progress... ━━━━━━━━━━━━�
 │ Object Storage (TB) │    70.0 │
 └─────────────────────┴─────────┘
 ```
-
 

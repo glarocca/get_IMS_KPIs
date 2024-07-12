@@ -18,6 +18,7 @@
 import json
 import re
 import requests
+import urllib.parse
 import warnings
 warnings.filterwarnings("ignore")
 from datetime import date
@@ -50,57 +51,59 @@ def getServiceOrders(env, orders):
             "Authorization": "Bearer " + env['JIRA_AUTH_TOKEN']
     }
 
-    #print(_url)
+   
     curl = requests.get(url=_url, headers=headers)
     orders = curl.json()
 
     return(orders['issues'])
 
 
-def getCustomersComplains(env, complains):
-    ''' Return the list of Customer Complains '''
+def getComplaints(env, complaints):
+    ''' Return the list of Customer Complaints '''
 
-    _issues = []
+    _issues = complaints = []
 
     start = (env['DATE_FROM'].replace("/", "-")) + "-01"
     end = (env['DATE_TO'].replace("/", "-")) + "-01"
 
     _url = env['JIRA_SERVER_URL'] \
             + "rest/api/latest/search?jql=project=" \
-            + env['COMPLAINS_PROJECTKEY'] \
-            + "&Complain=Yes" \
+            + env['COMPLAINTS_PROJECTKEY'] \
+            + "&maxResults=500" \
+            + "&resolution=All" \
+            + "&Complaint=Yes" \
             + "&created>=" + start \
             + "&created<=" + end \
-            + "&maxResults=10000" 
-            #+ " ORDER BY priority DESC, updated DESC"
+            + " ORDER BY priority DESC"
 
     headers = {
             "Accept": "Application/json",
             "Authorization": "Bearer " + env['JIRA_AUTH_TOKEN']
     }
-
+ 
     curl = requests.get(url=_url, headers=headers)
     issues = curl.json()
 
-    total = 0
     for issue in issues['issues']:
-        #print(issue)
-        # customfield_12409 = Complain
-        if issue['fields']['customfield_12409']:
-           if "Yes" in (issue['fields']['customfield_12409']['value']):
-              _issues.append(issue['key'])
-              total = total + 1
+        if issue['fields']['status']['name']:
+           # customfield_12409 = Complaint
+           if issue['fields']['customfield_12409']:
+              if "Yes" in (issue['fields']['customfield_12409']['value']):
+                 _month = issue['fields']['created'][5:7]
+                 _year = issue['fields']['created'][0:4]
+        
+                 if int(_year) >= int(env['DATE_FROM'][0:4]) and \
+                    int(_year) <= int(env['DATE_TO'][0:4]):
+                    if int(_month) >= int(env['DATE_FROM'][5:7]):
+                        details = getComplaintDetails(env, issue['key'])
+                        complaints.append(details)
     
-    if len(_issues):
-       for issue in _issues:
-           complains = getComplainDetails(env, issue, complains)
-
-    return(complains)
+    return(complaints)
 
 
 
-def getComplainDetails(env, issue, complains):
-    ''' Retrieve the details for a given customer complain (issue) '''
+def getComplaintDetails(env, issue):
+    ''' Retrieve the details for a given customer complaint (issue) '''
 
     _url = env['JIRA_SERVER_URL'] + "rest/api/latest/issue/" + issue
 
@@ -112,14 +115,9 @@ def getComplainDetails(env, issue, complains):
     curl = requests.get(url=_url, headers=headers)
     issue_details = curl.json()
 
-    if issue_details['fields']['status']['name']:
-       _year = issue_details['fields']['created'][0:4]
-       _month = issue_details['fields']['created'][5:7]
+    details = []
 
-       if (int(_year) == int(env['DATE_TO'][0:4]) and \
-           int(_month) <= int(env['DATE_TO'][5:7])):
-
-           complain = {
+    details = {
              "Issue": issue,
              "URL": env['JIRA_SERVER_URL'] + "browse/" + issue,
              "Status": issue_details['fields']['status']['name'].upper(),
@@ -127,12 +125,10 @@ def getComplainDetails(env, issue, complains):
              "Priority": issue_details['fields']['priority']['name'].upper(),
              "Assignee": issue_details['fields']['assignee']['displayName'],
              "Email": issue_details['fields']['assignee']['emailAddress'],
-             "Complain": issue_details['fields']['customfield_12409']['value']
-           }
+             "Complaint": issue_details['fields']['customfield_12409']['value']
+    }
 
-           complains.append(complain)
-
-    return (complains)
+    return (details)
 
 
 def getSLAViolations(env, violations):
