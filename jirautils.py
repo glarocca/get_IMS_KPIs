@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-#  Copyright 2023 EGI Foundation
+#  Copyright 2025 EGI Foundation
 # 
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ from utils import colourise
 
 __author__    = "Giuseppe LA ROCCA"
 __email__     = "giuseppe.larocca@egi.eu"
-__version__   = "$Revision: 0.4"
-__date__      = "$Date: 26/09/2023 11:58:27"
-__copyright__ = "Copyright (c) 2023 EGI Foundation"
+__version__   = "$Revision: 0.5"
+__date__      = "$Date: 16/03/2025 11:58:27"
+__copyright__ = "Copyright (c) 2025 EGI Foundation"
 __license__   = "Apache Licence v2.0"
 
 
@@ -51,7 +51,6 @@ def getServiceOrders(env, orders):
             "Authorization": "Bearer " + env['JIRA_AUTH_TOKEN']
     }
 
-   
     curl = requests.get(url=_url, headers=headers)
     orders = curl.json()
 
@@ -63,7 +62,8 @@ def getComplaints(env, complaints):
 
     _issues = complaints = []
 
-    start = (env['DATE_FROM'].replace("/", "-")) + "-01"
+    #start = (env['DATE_FROM'].replace("/", "-")) + "-01"
+    start = (env['DATE_FROM'][0:4]) + "-01-01"
     end = (env['DATE_TO'].replace("/", "-")) + "-01"
 
     _url = env['JIRA_SERVER_URL'] \
@@ -94,7 +94,7 @@ def getComplaints(env, complaints):
         
                  if int(_year) >= int(env['DATE_FROM'][0:4]) and \
                     int(_year) <= int(env['DATE_TO'][0:4]):
-                    if int(_month) >= int(env['DATE_FROM'][5:7]):
+                    #if int(_month) >= int(env['DATE_FROM'][5:7]):
                         details = getComplaintDetails(env, issue['key'])
                         complaints.append(details)
     
@@ -135,6 +135,7 @@ def getSLAViolations(env, violations):
     ''' Retrieve the SLA violations in the reporting period ''' 
 
     _issues = []
+    violations = []
     
     start = (env['DATE_FROM'].replace("/", "-")) + "-01"
     end = (env['DATE_TO'].replace("/", "-")) + "-31"
@@ -144,7 +145,7 @@ def getSLAViolations(env, violations):
             + env['SLA_VIOLATIONS_PROJECTKEY'] \
             + "&maxResults=500" \
             + "&issueType=" + env['SLA_VIOLATIONS_ISSUETYPE'] \
-            + "&resolution=Unresolved" \
+            + "&resolution=All" \
             + "&created>=" + start \
             + "&created<=" + end \
             + " ORDER BY priority DESC, updated DESC"
@@ -159,10 +160,10 @@ def getSLAViolations(env, violations):
 
     for issue in issues['issues']:
         if env['SLA_VIOLATIONS_ISSUETYPE'] in (issue['fields']['issuetype']['name']):
-            if ((issue['fields']['created'] >= start) and
-                (issue['fields']['created'] < end)):
-               _issues.append(issue['key'])
-               #print(issue['key'], issue['fields']['created'])
+            if ((issue['fields']['created'][0:10] >= start) and
+                (issue['fields']['created'][0:10] < end)):
+                _issues.append(issue['key'])
+                #print(issue['key'], issue['fields']['created'])
 
     if len(_issues):
        for issue in _issues:
@@ -188,20 +189,31 @@ def getSLAViolationsDetails(env, issue, violations):
        _year = issue_details['fields']['created'][0:4]
        _month = issue_details['fields']['created'][5:7]
 
-       #print(_year, _month)
-
-       if (int(_year) == int(env['DATE_TO'][0:4]) and \
-           int(_month) <= int(env['DATE_TO'][5:7])):
-
-           violation = {
+       if issue_details['fields']['assignee']:
+          violation = {
                 "Issue": issue,
                 "URL": env['JIRA_SERVER_URL'] + "browse/" + issue,
                 "Status": issue_details['fields']['status']['name'].upper(),
                 "Created": issue_details['fields']['created'][0:10],
-                "Priority": issue_details['fields']['priority']['name'].upper()
-           }
+                "Priority": issue_details['fields']['priority']['name'].upper(),
+                "DisplayName": issue_details['fields']['assignee']['displayName'],
+                "Assignee": issue_details['fields']['assignee']['emailAddress']
+          }
+       else:   
+          violation = {
+                "Issue": issue,
+                "URL": env['JIRA_SERVER_URL'] + "browse/" + issue,
+                "Status": issue_details['fields']['status']['name'].upper(),
+                "Created": issue_details['fields']['created'][0:10],
+                "Priority": issue_details['fields']['priority']['name'].upper(),
+                "DisplayName": "N/A",
+                "Assignee": "N/A"
+          }
 
-           violations.append(violation)
+       if env['LOG'] == "DEBUG":
+          print(violation)
+
+       violations.append(violation)
 
     return (violations)       
 

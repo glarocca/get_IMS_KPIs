@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-#  Copyright 2023 EGI Foundation
+#  Copyright 2025 EGI Foundation
 # 
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import string
 
 __author__    = "Giuseppe LA ROCCA"
 __email__     = "giuseppe.larocca@egi.eu"
-__version__   = "$Revision: 0.7"
-__date__      = "$Date: 18/08/2023 11:58:27"
-__copyright__ = "Copyright (c) 2023 EGI Foundation"
+__version__   = "$Revision: 0.9"
+__date__      = "$Date: 15/03/2025 11:58:27"
+__copyright__ = "Copyright (c) 2025 EGI Foundation"
 __license__   = "Apache Licence v2.0"
 
 
@@ -103,7 +103,7 @@ def get_env_settings():
            
            d['JIRA_SERVER_URL'] = os.environ['JIRA_SERVER_URL']
            d['JIRA_AUTH_TOKEN'] = os.environ['JIRA_AUTH_TOKEN']
-           d['COMPLAINS_PROJECTKEY'] = os.environ['COMPLAINS_PROJECTKEY']
+           d['COMPLAINTS_PROJECTKEY'] = os.environ['COMPLAINTS_PROJECTKEY']
 
            d['SLA_VIOLATIONS_PROJECTKEY'] = os.environ['SLA_VIOLATIONS_PROJECTKEY']
            d['SLA_VIOLATIONS_ISSUETYPE'] = os.environ['SLA_VIOLATIONS_ISSUETYPE']
@@ -111,6 +111,14 @@ def get_env_settings():
            
            d['SERVICE_ORDERS_PROJECTKEY'] = os.environ['SERVICE_ORDERS_PROJECTKEY']
            d['SERVICE_ORDERS_ISSUETYPE'] = os.environ['SERVICE_ORDERS_ISSUETYPE']
+           
+           d['PROGRESS_BAR_TITLE'] = os.environ['PROGRESS_BAR_TITLE']
+           d['PROGRESS_BAR_MAX_SIZE'] = os.environ['PROGRESS_BAR_MAX_SIZE']
+           d['PROGRESS_BAR_MAX_TASKS'] = os.environ['PROGRESS_BAR_MAX_TASKS']
+           d['PROGRESS_BAR_TYPE'] = os.environ['PROGRESS_BAR_TYPE']
+           d['PROGRESS_BAR_SPINNER_TYPE'] = os.environ['PROGRESS_BAR_SPINNER_TYPE']
+           d['PROGRESS_BAR_DUAL_LINE'] = os.environ['PROGRESS_BAR_DUAL_LINE']
+           d['PROGRESS_BAR_STATS'] = os.environ['PROGRESS_BAR_STATS']
            
            d['DATE_FROM'] = os.environ['DATE_FROM']
            d['DATE_TO'] = os.environ['DATE_TO']
