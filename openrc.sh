@@ -32,7 +32,7 @@ export SERVICE_ORDERS_ISSUETYPE="Service order"
 # A L I V E ** P R O G R E S S ** S E T T I N G S #
 ###################################################
 export PROGRESS_BAR_TITLE="Processing"
-export PROGRESS_BAR_MAX_TASKS="60"
+export PROGRESS_BAR_MAX_TASKS="63"
 export PROGRESS_BAR_MAX_SIZE="70"
 # Available bar options:
 # smooth, classic, classic2, brackets,

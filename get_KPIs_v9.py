@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-#  Copyright 2024 EGI Foundation
+#  Copyright 2025 EGI Foundation
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ __author__    = "Giuseppe LA ROCCA"
 __email__     = "giuseppe.larocca@egi.eu"
 __version__   = "$Revision: 0.9"
 __date__      = "$Date: 15/03/2025 06:55:17"
-__copyright__ = "Copyright (c) 2024 EGI Foundation"
+__copyright__ = "Copyright (c) 2025 EGI Foundation"
 __license__   = "Apache Licence v2.0"
 
 
@@ -347,8 +347,8 @@ def getKPIs(env, totalPages, total_CPU, total_RAM,
                    customer_name = customer['title'].replace("Customer: ", "")
                    details = customer['details']
                    #print(json.dumps(details, indent = 4, sort_keys = False))
-                   time.sleep(0.05)
-                   bar.text("%s Gathering the Customer's metadata from Confluence in progress..." \
+                   time.sleep(0.5)
+                   bar.text("%s Parsing the metadata of the Customers in progress..." \
                        %colourise("yellow", "[INFO]"))
                    bar()
                
@@ -456,6 +456,10 @@ def getKPIs(env, totalPages, total_CPU, total_RAM,
     complaints = []
     KPI_CRM_Complains_1 = 0
     KPI_CRM_Complains_2 = 0
+
+    bar.text("%s Generating the list of Customers Complaints: IN PROGRESS..." \
+        %colourise("yellow", "[INFO]"))
+    bar()
     complaints = getComplaints(env, complaints)
 
     if (env['LOG'] == "DEBUG"):
@@ -514,6 +518,11 @@ def getKPIs(env, totalPages, total_CPU, total_RAM,
     # Calculate the KPI:SLM.SLA.2
     # Retrieve the number of SLA Violations 
     violations = []
+
+    bar.text("%s Generating the list of SLA Violations: IN PROGRESS..." \
+        %colourise("yellow", "[INFO]"))
+    bar()
+
     violations = getSLAViolations(env, violations)
     
     if (env['LOG'] == "DEBUG"):
@@ -541,7 +550,7 @@ def getKPIs(env, totalPages, total_CPU, total_RAM,
                   violation['Status'],
                   violation['Created'],
                   violation['Priority'],
-                  violation['Assignee']
+                  violation['DisplayName']
                 )
            
            console.print(table)
@@ -607,12 +616,21 @@ def main():
             stats = env['PROGRESS_BAR_STATS']) as bar:
        
             # Retrieve the totalPages of a spaceKey
+            bar.text("%s Collecting the total of the Confluence pages to be processed: IN PROGRESS..." \
+                %colourise("yellow", "[INFO]"))
+            bar()
+
             totalPages = getTotalPages(env)
-            time.sleep(1)
             if totalPages:
-               bar.text("%s Gathering the total of the Confluence pages to be parsed: DONE!" \
+               bar.text("%s Collecting the total of the Confluence pages to be processed: DONE!" \
                    %colourise("yellow", "[INFO]"))
+               time.sleep(1)
                bar()
+
+            bar.text("%s Examining the metadata of customers and generating the final reports in progress..." \
+                %colourise("yellow", "[INFO]"))
+            time.sleep(1)
+            bar()
 
             # Generate reporting for a given time window
             customers_list = []
@@ -623,11 +641,6 @@ def main():
                       total_CPU, total_RAM, total_HEPSPEC, 
                       total_Block_Storage, total_Object_Storage, 
                       bar)
-
-            time.sleep(1)
-            bar.text("%s Parsing of the Customers' metadata and producing of the final reports in progress..." \
-                %colourise("yellow", "[INFO]"))
-            bar()
 
             print(colourise("green", "\n\t\t\t\t\t\t *** [SUMMARY REPORT] ***"))
             if update:
@@ -649,7 +662,7 @@ def main():
                    table.add_row(key, str(reporting[key]))
 
                console.print(table)
-               time.sleep(1)
+               time.sleep(3)
                bar.text("%s Customers Status reporting: GENERATED!" \
                    %colourise("yellow", "[INFO]"))
                bar()
@@ -665,10 +678,6 @@ def main():
                   table.add_column("KPIs", style = "dim", width = 23)
                   table.add_column("Description", width = 72)
                   table.add_column("Value", justify = "right")
-                  time.sleep(1)
-                  bar.text("%s CRM/SLM KPIs report: GENERATED!" \
-                      %colourise("yellow", "[INFO]"))
-                  bar()
 
                   table.add_row(
                      "KPI:CRM.Customers.1",
@@ -712,7 +721,9 @@ def main():
 
                   print("\n")
                   console.print(table)
-                  time.sleep(1)
+                  time.sleep(3)
+                  bar.text("%s CRM/SLM KPIs report: GENERATED!" \
+                      %colourise("yellow", "[INFO]"))
                   bar()
 
                   print(colourise("cyan", "\n[SERVICEs]"), "Allocated in the reporting period")
@@ -729,7 +740,7 @@ def main():
                   table.add_row("Block Storage (TB)", str(total_Block_Storage))
                   table.add_row("Object Storage (TB)", str(total_Object_Storage))
                   console.print(table)
-                  time.sleep(1)
+                  time.sleep(3)
                   bar.text("%s Resources usage report: GENERATED!" \
                      %colourise("yellow", "[INFO]"))
                   bar()

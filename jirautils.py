@@ -128,6 +128,9 @@ def getComplaintDetails(env, issue):
              "Complaint": issue_details['fields']['customfield_12409']['value']
     }
 
+    if env['LOG'] == "DEBUG":
+       print(details)
+
     return (details)
 
 
